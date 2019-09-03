@@ -2,6 +2,8 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.Azure.Storage.Blob.CloudBlob;
+using Microsoft.Azure.Storage.Blob.ICloudBlob;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -77,7 +79,7 @@ namespace nsgFunc
             byte[] nsgMessages = bytePool.Rent((int)dataLength);
             try
             {                
-                CloudAppendBlob blob = nsgDataBlobBinder.BindAsync<CloudBlockBlob>(attributes).Result;
+                CloudAppendBlob blob = nsgDataBlobBinder.BindAsync<CloudAppendBlob>(attributes).Result;
                 await blob.DownloadRangeToByteArrayAsync(nsgMessages, 0, startingByte, dataLength);
 
                 if (nsgMessages[0] == ',')
