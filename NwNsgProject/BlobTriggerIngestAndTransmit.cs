@@ -44,7 +44,7 @@ namespace nsgFunc
                 throw new System.ArgumentNullException("outputBinding", "Please provide setting.");
             }
 
-            var blobDetails = new BlobDetails(subId, resourceGroup, nsgName, blobYear, blobMonth, blobDay, blobHour, blobMinute, mac);
+            var blobDetails = new BlobDetails(subId, resourceGroup, nsgName, blobYear, blobMonth, blobDay, blobHour, blobMinute);
 
             // get checkpoint
             Checkpoint checkpoint = Checkpoint.GetCheckpoint(blobDetails, checkpointTable);
