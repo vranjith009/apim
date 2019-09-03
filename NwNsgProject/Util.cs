@@ -322,7 +322,7 @@ namespace nsgFunc
                     new StorageAccountAttribute("cefLogAccount")
                 };
 
-                CloudBlockBlob blob = await errorRecordBinder.BindAsync<CloudBlockBlob>(attributes);
+                CloudAppendBlob blob = await errorRecordBinder.BindAsync<CloudAppendBlob>(attributes);
                 await blob.UploadFromByteArrayAsync(transmission, 0, transmission.Length);
 
                 transmission = new Byte[] { };
