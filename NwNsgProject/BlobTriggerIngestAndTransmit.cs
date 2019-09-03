@@ -77,7 +77,7 @@ namespace nsgFunc
             byte[] nsgMessages = bytePool.Rent((int)dataLength);
             try
             {                
-                CloudAppendBlob blob = nsgDataBlobBinder.BindAsync<CloudAppendBlob>(attributes).Result;
+                CloudAppendBlob blob = nsgDataBlobBinder.BindAsync<CloudBlockBlob>(attributes).Result;
                 await blob.DownloadRangeToByteArrayAsync(nsgMessages, 0, startingByte, dataLength);
 
                 if (nsgMessages[0] == ',')
