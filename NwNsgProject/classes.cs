@@ -157,8 +157,8 @@ class DenormalizedRecord
     private void BuildCEF(ref StringBuilder sb)
     {
         sb.Append(MakeCEFTime());
-        sb.Append("|Microsoft.Network");
-        sb.Append("|NETWORKSECURITYGROUPS");
+        sb.Append("|Microsoft.Apimanagement");
+        sb.Append("|SERVICE");
         sb.Append("|").Append(version.ToString("0.0"));
         sb.Append("|").Append(category);
         sb.Append("|").Append(operationName);
