@@ -80,7 +80,7 @@ namespace nsgFunc
 
             try
             {
-                CloudAppendBlob blob = await nsgDataBlobBinder.BindAsync<CloudAppendBlob>(attributes);
+                CloudBlockBlob blob = await nsgDataBlobBinder.BindAsync<CloudBlockBlob>(attributes);
                 await blob.FetchAttributesAsync();
                 var metadata = blob.Metadata;
                 if (metadata.ContainsKey("rescan"))
