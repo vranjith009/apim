@@ -18,12 +18,12 @@ namespace nsgFunc
         //
         [FunctionName("RescanAPI")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "rescan/resourceId=/SUBSCRIPTIONS/{subId}/RESOURCEGROUPS/{resourceGroup}/PROVIDERS/MICROSOFT.APIMANAGEMENT/SERVICES/{nsgName}/y={blobYear}/m={blobMonth}/d={blobDay}/h={blobHour}/m={blobMinute}/PT1H.json")]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "rescan/APIM/Logs/{blobDate}/{blobHour}/*.json")]
 //            [Table("checkpoints", Connection = "AzureWebJobsStorage")] CloudTable checkpointToReset,
             HttpRequest req,
             Binder checkpointsBinder,
             Binder nsgDataBlobBinder,
-            string subId, string resourceGroup, string nsgName, string blobYear, string blobMonth, string blobDay, string blobHour, string blobMinute,
+            string blobDate, string blobHour,
             ILogger log)
         {
             string nsgSourceDataAccount = Util.GetEnvironmentVariable("nsgSourceDataAccount");
@@ -47,8 +47,8 @@ namespace nsgFunc
                 throw new System.ArgumentNullException("blobContainerName", "Please provide setting.");
             }
 
-            var blobName = $"resourceId=/SUBSCRIPTIONS/{subId}/RESOURCEGROUPS/{resourceGroup}/PROVIDERS/MICROSOFT.APIMANAGEMENT/SERVICE/{nsgName}/y={blobYear}/m={blobMonth}/d={blobDay}/h={blobHour}/m={blobMinute}/PT1H.json";
-            var blobDetails = new BlobDetails(subId, resourceGroup, nsgName, blobYear, blobMonth, blobDay, blobHour, blobMinute);
+            var blobName = $"APIM/Logs/{blobDate}/{blobHour}/*.json";
+            var blobDetails = new BlobDetails(blobDate, blobHour);
 
             var tableAttributes = new Attribute[]
             {
