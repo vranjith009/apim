@@ -13,7 +13,7 @@ namespace nsgFunc
     {
         [FunctionName("BlobTriggerIngestAndTransmit")]
         public static async Task Run(
-            [BlobTrigger("%blobContainerName%/APIM/Logs/d={blobDay}/h={blobHour}/*.json", Connection = "%nsgSourceDataAccount%")]CloudBlockBlob myBlob,
+            [BlobTrigger("%blobContainerName%/APIM/Logs/{blobDay}/{blobHour}/*.json", Connection = "%nsgSourceDataAccount%")]CloudBlockBlob myBlob,
             [Table("checkpoints", Connection = "AzureWebJobsStorage")] CloudTable checkpointTable,
             Binder nsgDataBlobBinder,
             Binder cefLogBinder,

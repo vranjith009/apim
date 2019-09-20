@@ -18,7 +18,7 @@ namespace nsgFunc
         //
         [FunctionName("RescanAPI")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "rescan/APIM/Logs/d={blobDay}/h={blobHour}/*.json")]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "rescan/APIM/Logs/{blobDay}/{blobHour}/*.json")]
 //            [Table("checkpoints", Connection = "AzureWebJobsStorage")] CloudTable checkpointToReset,
             HttpRequest req,
             Binder checkpointsBinder,
@@ -47,7 +47,7 @@ namespace nsgFunc
                 throw new System.ArgumentNullException("blobContainerName", "Please provide setting.");
             }
 
-            var blobName = $"APIM/Logs/d={blobDay}/h={blobHour}/*.json";
+            var blobName = $"APIM/Logs/{blobDay}/{blobHour}/*.json";
             var blobDetails = new BlobDetails(blobDay, blobHour);
 
             var tableAttributes = new Attribute[]
