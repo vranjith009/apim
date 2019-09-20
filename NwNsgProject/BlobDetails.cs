@@ -43,7 +43,7 @@ namespace nsgFunc
             Mac = parts[15].Split('=')[1];
         }
 
-        public BlobDetails(string day, string hour)
+        public BlobDetails(string subscriptionId, string resourceGroupName, string nsgName, string year, string month, string day, string hour, string minute, string mac)
         {
             SubscriptionId = subscriptionId;
             ResourceGroupName = resourceGroupName;
@@ -56,7 +56,7 @@ namespace nsgFunc
             Mac = mac;
         }
 
-        public BlobDetails(string day, string hour)
+        public BlobDetails(string subscriptionId, string resourceGroupName, string nsgName, string year, string month, string day, string hour, string minute)
         {
             SubscriptionId = subscriptionId;
             ResourceGroupName = resourceGroupName;
