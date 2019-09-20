@@ -37,8 +37,8 @@ namespace nsgFunc
             NsgName = parts[9];
             Year = parts[10].Split('=')[1];
             Month = parts[11].Split('=')[1];
-            Day = parts[12].Split('=')[1];
-            Hour = parts[13].Split('=')[1];
+            Day = parts[12].Split('-')[1];
+            Hour = parts[13].Split('-')[1];
             Minute = parts[14].Split('=')[1];
             Mac = parts[15].Split('=')[1];
         }
