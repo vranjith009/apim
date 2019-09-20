@@ -18,70 +18,70 @@ namespace nsgFunc
         //m={blobMinute} 14
         //macAddress={mac} 15
         //PT1H.json";
-        public string SubscriptionId { get; set; }
-        public string ResourceGroupName { get; set; }
-        public string NsgName { get; set; }
-        public string Year { get; set; }
-        public string Month { get; set; }
+        //public string SubscriptionId { get; set; }
+        //public string ResourceGroupName { get; set; }
+        //public string NsgName { get; set; }
+        //public string Year { get; set; }
+        //public string Month { get; set; }
         public string Day { get; set; }
         public string Hour { get; set; }
-        public string Minute { get; set; }
-        public string Mac { get; set; }
+        //public string Minute { get; set; }
+        //public string Mac { get; set; }
 
         public BlobDetails(string path)
         {
             var parts = path.Split('/');
 
-            SubscriptionId = parts[3];
-            ResourceGroupName = parts[5];
-            NsgName = parts[9];
-            Year = parts[10].Split('=')[1];
-            Month = parts[11].Split('=')[1];
-            Day = parts[12].Split('-')[1];
-            Hour = parts[13].Split('-')[1];
-            Minute = parts[14].Split('=')[1];
-            Mac = parts[15].Split('=')[1];
+            //SubscriptionId = parts[3];
+            //ResourceGroupName = parts[5];
+            //NsgName = parts[9];
+            //Year = parts[10].Split('=')[1];
+            //Month = parts[11].Split('=')[1];
+            Day = parts[3].Split('-')[0];
+            Hour = parts[4];
+            //Minute = parts[14].Split('=')[1];
+            //Mac = parts[15].Split('=')[1];
         }
 
-        public BlobDetails(string subscriptionId, string resourceGroupName, string nsgName, string year, string month, string day, string hour, string minute, string mac)
+        public BlobDetails(string day, string hour)
         {
-            SubscriptionId = subscriptionId;
-            ResourceGroupName = resourceGroupName;
-            NsgName = nsgName;
-            Year = year;
-            Month = month;
+            //SubscriptionId = subscriptionId;
+            //ResourceGroupName = resourceGroupName;
+            //NsgName = nsgName;
+            //Year = year;
+            //Month = month;
             Day = day;
             Hour = hour;
-            Minute = minute;
-            Mac = mac;
+            //Minute = minute;
+            //Mac = mac;
         }
 
-        public BlobDetails(string subscriptionId, string resourceGroupName, string nsgName, string year, string month, string day, string hour, string minute)
+        public BlobDetails(string day, string hour)
         {
-            SubscriptionId = subscriptionId;
-            ResourceGroupName = resourceGroupName;
-            NsgName = nsgName;
-            Year = year;
-            Month = month;
+            //SubscriptionId = subscriptionId;
+            //ResourceGroupName = resourceGroupName;
+            //NsgName = nsgName;
+            //Year = year;
+            //Month = month;
             Day = day;
             Hour = hour;
-            Minute = minute;
-            Mac = "none";
+            //Minute = minute;
+            //Mac = "none";
         }
 
-        public string GetPartitionKey()
-        {
-            return string.Format("{0}_{1}_{2}_{3}", SubscriptionId.Replace("-", "_"), ResourceGroupName, NsgName, Mac);
-        }
+        //public string GetPartitionKey()
+        //{
+        //    return string.Format("{0}_{1}_{2}_{3}", SubscriptionId.Replace("-", "_"), ResourceGroupName, NsgName, Mac);
+        //}
 
-        public string GetRowKey()
-        {
-            return string.Format("{0}_{1}_{2}_{3}_{4}", Year, Month, Day, Hour, Minute);
-        }
+        //public string GetRowKey()
+        //{
+        //    return string.Format("{0}_{1}_{2}_{3}_{4}", Year, Month, Day, Hour, Minute);
+        //}
 
-        public override string ToString()
-        {
-            return string.Format("{0}_{1}_{2}_{3}", ResourceGroupName, NsgName, Day, Hour);
-        }
+        //public override string ToString()
+        //{
+        //    return string.Format("{0}_{1}_{2}_{3}", ResourceGroupName, NsgName, Day, Hour);
+        //}
     }
 }
