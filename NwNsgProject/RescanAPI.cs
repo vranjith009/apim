@@ -48,7 +48,7 @@ namespace nsgFunc
             }
 
             var blobName = $"APIM/Logs/{blobDay}/{blobHour}/*.json";
-            var blobDetails = new BlobDetails(blobDay, blobHour);
+            var blobDetails = new BlobDetails(subId, resourceGroup, nsgName, blobYear, blobMonth, blobDay, blobHour, blobMinute, mac);
 
             var tableAttributes = new Attribute[]
             {
