@@ -17,7 +17,7 @@ namespace nsgFunc
             [Table("checkpoints", Connection = "AzureWebJobsStorage")] CloudTable checkpointTable,
             Binder nsgDataBlobBinder,
             Binder cefLogBinder,
-            string blobDay, string blobHour,
+            string subId, string resourceGroup, string nsgName, string blobYear, string blobMonth,string blobDay, string blobHour, string blobMinute, string mac,
             ExecutionContext executionContext,
             ILogger log)
         {

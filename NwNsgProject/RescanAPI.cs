@@ -23,7 +23,7 @@ namespace nsgFunc
             HttpRequest req,
             Binder checkpointsBinder,
             Binder nsgDataBlobBinder,
-            string blobDay, string blobHour,
+            string subId, string resourceGroup, string nsgName, string blobYear, string blobMonth,string blobDay, string blobHour, string blobMinute, string mac,
             ILogger log)
         {
             string nsgSourceDataAccount = Util.GetEnvironmentVariable("nsgSourceDataAccount");
