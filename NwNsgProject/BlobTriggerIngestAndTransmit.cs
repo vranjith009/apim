@@ -13,21 +13,21 @@ namespace nsgFunc
     {
         [FunctionName("BlobTriggerIngestAndTransmit")]
         public static async Task Run(
-            [BlobTrigger("%blobContainerName%/resourceId=/SUBSCRIPTIONS/{subId}/RESOURCEGROUPS/{resourceGroup}/PROVIDERS/MICROSOFT.NETWORK/NETWORKSECURITYGROUPS/{nsgName}/y={blobYear}/m={blobMonth}/d={blobDay}/h={blobHour}/m={blobMinute}/macAddress={mac}/PT1H.json", Connection = "%nsgSourceDataAccount%")]CloudBlockBlob myBlob,
+            [BlobTrigger("%blobContainerName%/APIM/Logs/{date}/{hr}/{name}", Connection = "%apimSourceDataAccount%")]CloudBlockBlob myBlob,
             [Table("checkpoints", Connection = "AzureWebJobsStorage")] CloudTable checkpointTable,
             Binder nsgDataBlobBinder,
             Binder cefLogBinder,
-            string subId, string resourceGroup, string nsgName, string blobYear, string blobMonth, string blobDay, string blobHour, string blobMinute, string mac,
+            string date, string hr, string name,
             ExecutionContext executionContext,
             ILogger log)
         {
             log.LogDebug($"BlobTriggerIngestAndTransmit triggered: {executionContext.InvocationId} ");
 
-            string nsgSourceDataAccount = Util.GetEnvironmentVariable("nsgSourceDataAccount");
-            if (nsgSourceDataAccount.Length == 0)
+            string apimSourceDataAccount = Util.GetEnvironmentVariable("apimSourceDataAccount");
+            if (apimSourceDataAccount.Length == 0)
             {
-                log.LogError("Value for nsgSourceDataAccount is required.");
-                throw new System.ArgumentNullException("nsgSourceDataAccount", "Please provide setting.");
+                log.LogError("Value for apimSourceDataAccount is required.");
+                throw new System.ArgumentNullException("apimSourceDataAccount", "Please provide setting.");
             }
 
             string blobContainerName = Util.GetEnvironmentVariable("blobContainerName");
@@ -44,7 +44,7 @@ namespace nsgFunc
                 throw new System.ArgumentNullException("outputBinding", "Please provide setting.");
             }
 
-            var blobDetails = new BlobDetails(subId, resourceGroup, nsgName, blobYear, blobMonth, blobDay, blobHour, blobMinute, mac);
+            var blobDetails = new BlobDetails(date, hr, name, blobContainerName);
 
             // get checkpoint
             Checkpoint checkpoint = Checkpoint.GetCheckpoint(blobDetails, checkpointTable);
@@ -69,7 +69,7 @@ namespace nsgFunc
             var attributes = new Attribute[]
             {
                 new BlobAttribute(string.Format("{0}/{1}", blobContainerName, myBlob.Name)),
-                new StorageAccountAttribute(nsgSourceDataAccount)
+                new StorageAccountAttribute(apimSourceDataAccount)
             };
 
             string nsgMessagesString = "";

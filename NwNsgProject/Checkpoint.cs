@@ -21,13 +21,13 @@ namespace nsgFunc
         public static Checkpoint GetCheckpoint(BlobDetails blobDetails, CloudTable checkpointTable)
         {
             TableOperation operation = TableOperation.Retrieve<Checkpoint>(
-                blobDetails.GetPartitionKey(), blobDetails.GetRowKey());
+                blobDetails.GetPartitionKey_1(), blobDetails.GetRowKey_1());
             TableResult result = checkpointTable.ExecuteAsync(operation).Result;
 
             Checkpoint checkpoint = (Checkpoint)result.Result;
             if (checkpoint == null)
             {
-                checkpoint = new Checkpoint(blobDetails.GetPartitionKey(), blobDetails.GetRowKey(), "", 0, 1);
+                checkpoint = new Checkpoint(blobDetails.GetPartitionKey_1(), blobDetails.GetRowKey_1(), "", 0, 1);
             }
             if (checkpoint.CheckpointIndex == 0)
             {
