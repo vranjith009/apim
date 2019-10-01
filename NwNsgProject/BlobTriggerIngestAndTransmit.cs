@@ -13,7 +13,7 @@ namespace nsgFunc
     {
         [FunctionName("BlobTriggerIngestAndTransmit")]
         public static async Task Run(
-            [BlobTrigger("%blobContainerName%/APIM/Logs/{date}/{hr}/{name}", Connection = "%apimSourceDataAccount%")]CloudBlockBlob myBlob,
+            [BlobTrigger("%blobContainerName%/APIM/Logs/{date}/{hr}/{name}", Connection = "%nsgSourceDataAccount%")]CloudBlockBlob myBlob,
             [Table("checkpoints", Connection = "AzureWebJobsStorage")] CloudTable checkpointTable,
             Binder nsgDataBlobBinder,
             Binder cefLogBinder,
@@ -23,11 +23,11 @@ namespace nsgFunc
         {
             log.LogDebug($"BlobTriggerIngestAndTransmit triggered: {executionContext.InvocationId} ");
 
-            string apimSourceDataAccount = Util.GetEnvironmentVariable("apimSourceDataAccount");
-            if (apimSourceDataAccount.Length == 0)
+            string nsgSourceDataAccount = Util.GetEnvironmentVariable("nsgSourceDataAccount");
+            if (nsgSourceDataAccount.Length == 0)
             {
-                log.LogError("Value for apimSourceDataAccount is required.");
-                throw new System.ArgumentNullException("apimSourceDataAccount", "Please provide setting.");
+                log.LogError("Value for nsgSourceDataAccount is required.");
+                throw new System.ArgumentNullException("nsgSourceDataAccount", "Please provide setting.");
             }
 
             string blobContainerName = Util.GetEnvironmentVariable("blobContainerName");
@@ -69,7 +69,7 @@ namespace nsgFunc
             var attributes = new Attribute[]
             {
                 new BlobAttribute(string.Format("{0}/{1}", blobContainerName, myBlob.Name)),
-                new StorageAccountAttribute(apimSourceDataAccount)
+                new StorageAccountAttribute(nsgSourceDataAccount)
             };
 
             string nsgMessagesString = "";
