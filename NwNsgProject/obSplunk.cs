@@ -45,7 +45,9 @@ namespace nsgFunc
             int bytesSent = 0;
             
             log.LogInformation("Transmission message details : ");
-            foreach (var transmission in convertToSplunkList(newClientContent, log))
+            string[] lines = newClientContent.Split(
+                new[] { Environment.NewLine }, StringSplitOptions.None);
+            foreach (var transmission in lines)
             {
                 log.LogInformation(transmission);
                 log.LogInformation("********************************************************************");
