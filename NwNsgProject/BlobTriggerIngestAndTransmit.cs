@@ -18,12 +18,11 @@ namespace nsgFunc
             [Table("checkpoints", Connection = "AzureWebJobsStorage")] CloudTable checkpointTable,
             Binder nsgDataBlobBinder,
             Binder cefLogBinder,
-            string date, string hr, string name,
+            // string date, string hr, 
+            string name,
             ExecutionContext executionContext,
             ILogger log)
         {
-            date = "02-10-2019";
-            hr = "14";
             log.LogDebug($"BlobTriggerIngestAndTransmit triggered: {executionContext.InvocationId} ");
 
             string nsgSourceDataAccount = Util.GetEnvironmentVariable("nsgSourceDataAccount");
@@ -47,7 +46,8 @@ namespace nsgFunc
                 throw new System.ArgumentNullException("outputBinding", "Please provide setting.");
             }
 
-            var blobDetails = new BlobDetails(date, hr, name, blobContainerName);
+            var blobDetails = new BlobDetails("02-10-2019", "14", name, blobContainerName);
+            // var blobDetails = new BlobDetails(date, hr, name, blobContainerName);
 
             // get checkpoint
             Checkpoint checkpoint = Checkpoint.GetCheckpoint(blobDetails, checkpointTable);
