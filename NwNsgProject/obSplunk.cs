@@ -43,9 +43,12 @@ namespace nsgFunc
             ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(ValidateMyCert);
 
             int bytesSent = 0;
-
+            
+            log.LogInformation("Transmission message details : ");
             foreach (var transmission in convertToSplunkList(newClientContent, log))
             {
+                log.LogInformation(transmission);
+                log.LogInformation("********************************************************************");
                 var client = new SingleHttpClientInstance();
                 try
                 {

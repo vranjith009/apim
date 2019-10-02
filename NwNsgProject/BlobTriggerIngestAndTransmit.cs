@@ -13,7 +13,8 @@ namespace nsgFunc
     {
         [FunctionName("BlobTriggerIngestAndTransmit")]
         public static async Task Run(
-            [BlobTrigger("%blobContainerName%/APIM/Logs/{date}/{hr}/{name}", Connection = "%nsgSourceDataAccount%")]CloudBlockBlob myBlob,
+            // [BlobTrigger("%blobContainerName%/APIM/Logs/{date}/{hr}/{name}", Connection = "%nsgSourceDataAccount%")]CloudBlockBlob myBlob,
+            [BlobTrigger("%blobContainerName%/APIM/Logs/02-10-2019/13/{name}", Connection = "%nsgSourceDataAccount%")]CloudBlockBlob myBlob,
             [Table("checkpoints", Connection = "AzureWebJobsStorage")] CloudTable checkpointTable,
             Binder nsgDataBlobBinder,
             Binder cefLogBinder,
@@ -21,6 +22,8 @@ namespace nsgFunc
             ExecutionContext executionContext,
             ILogger log)
         {
+            date = "02-10-2019";
+            hr = "13";
             log.LogDebug($"BlobTriggerIngestAndTransmit triggered: {executionContext.InvocationId} ");
 
             string nsgSourceDataAccount = Util.GetEnvironmentVariable("nsgSourceDataAccount");
@@ -54,17 +57,17 @@ namespace nsgFunc
             var endingByte = blockList.Where((item, index) => index < blockList.Count()-1).Sum(item => item.Length);
             var dataLength = endingByte - startingByte;
 
-            log.LogDebug("Blob: {0}, starting byte: {1}, ending byte: {2}, number of bytes: {3}", blobDetails.ToString(), startingByte, endingByte, dataLength);
+            log.LogInformation("Blob: {0}, starting byte: {1}, ending byte: {2}, number of bytes: {3}", blobDetails.ToString(), startingByte, endingByte, dataLength);
 
             if (dataLength == 0)
             {
                 log.LogWarning(string.Format("Blob: {0}, triggered on completed hour.", blobDetails.ToString()));
                 return;
             }
-            //foreach (var item in blockList)
-            //{
-            //    log.LogInformation("Name: {0}, Length: {1}", item.Name, item.Length);
-            //}
+            foreach (var item in blockList)
+            {
+               log.LogInformation("Name: {0}, Length: {1}", item.Name, item.Length);
+            }
 
             var attributes = new Attribute[]
             {
@@ -98,7 +101,7 @@ namespace nsgFunc
                 bytePool.Return(nsgMessages);
             }
 
-            log.LogDebug(nsgMessagesString);
+            log.LogInformation(nsgMessagesString);
             
 
             try
