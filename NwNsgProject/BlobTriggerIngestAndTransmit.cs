@@ -14,7 +14,7 @@ namespace nsgFunc
         [FunctionName("BlobTriggerIngestAndTransmit")]
         public static async Task Run(
             // [BlobTrigger("%blobContainerName%/APIM/Logs/{date}/{hr}/{name}", Connection = "%nsgSourceDataAccount%")]CloudBlockBlob myBlob,
-            [BlobTrigger("%blobContainerName%/APIM/Logs/02-10-2019/13/{name}", Connection = "%nsgSourceDataAccount%")]CloudBlockBlob myBlob,
+            [BlobTrigger("%blobContainerName%/APIM/Logs/02-10-2019/14/{name}", Connection = "%nsgSourceDataAccount%")]CloudBlockBlob myBlob,
             [Table("checkpoints", Connection = "AzureWebJobsStorage")] CloudTable checkpointTable,
             Binder nsgDataBlobBinder,
             Binder cefLogBinder,
@@ -23,7 +23,7 @@ namespace nsgFunc
             ILogger log)
         {
             date = "02-10-2019";
-            hr = "13";
+            hr = "14";
             log.LogDebug($"BlobTriggerIngestAndTransmit triggered: {executionContext.InvocationId} ");
 
             string nsgSourceDataAccount = Util.GetEnvironmentVariable("nsgSourceDataAccount");
