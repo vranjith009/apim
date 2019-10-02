@@ -50,7 +50,8 @@ namespace nsgFunc
                 
             foreach (var transmission in lines)
             {
-                log.LogInformation(transmission);
+                log.LogInformation(string.Format("Transmission - : {0} - data = {1}", transmission.Length, transmission));
+
                 log.LogInformation("********************************************************************");
                 var client = new SingleHttpClientInstance();
                 try
