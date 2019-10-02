@@ -13,12 +13,12 @@ namespace nsgFunc
     {
         [FunctionName("BlobTriggerIngestAndTransmit")]
         public static async Task Run(
-            // [BlobTrigger("%blobContainerName%/APIM/Logs/{date}/{hr}/{name}", Connection = "%nsgSourceDataAccount%")]CloudBlockBlob myBlob,
-            [BlobTrigger("%blobContainerName%/APIM/Logs/02-10-2019/14/{name}", Connection = "%nsgSourceDataAccount%")]CloudBlockBlob myBlob,
+            [BlobTrigger("%blobContainerName%/APIM/Logs/{date}/{hr}/{name}", Connection = "%nsgSourceDataAccount%")]CloudBlockBlob myBlob,
+            // [BlobTrigger("%blobContainerName%/APIM/Logs/02-10-2019/14/{name}", Connection = "%nsgSourceDataAccount%")]CloudBlockBlob myBlob,
             [Table("checkpoints", Connection = "AzureWebJobsStorage")] CloudTable checkpointTable,
             Binder nsgDataBlobBinder,
             Binder cefLogBinder,
-            // string date, string hr, 
+            string date, string hr, 
             string name,
             ExecutionContext executionContext,
             ILogger log)
@@ -46,8 +46,8 @@ namespace nsgFunc
                 throw new System.ArgumentNullException("outputBinding", "Please provide setting.");
             }
 
-            var blobDetails = new BlobDetails("02-10-2019", "14", name, blobContainerName);
-            // var blobDetails = new BlobDetails(date, hr, name, blobContainerName);
+            // var blobDetails = new BlobDetails("02-10-2019", "14", name, blobContainerName);
+            var blobDetails = new BlobDetails(date, hr, name, blobContainerName);
 
             // get checkpoint
             Checkpoint checkpoint = Checkpoint.GetCheckpoint(blobDetails, checkpointTable);
