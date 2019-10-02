@@ -55,18 +55,18 @@ namespace nsgFunc
             //newClientContent += trimmedMessages.Substring(curlyBrace);
             //newClientContent += "]}";
 
-            StringBuilder sb = StringBuilderPool.Allocate();
-            string newClientContent = "";
-            try
-            {
-                sb.Append("{\"records\":[").Append(nsgMessagesString).Append("]}");
-                newClientContent = sb.ToString();
-            } 
-            finally
-            {
-                StringBuilderPool.Free(sb);
-            }
-
+            // StringBuilder sb = StringBuilderPool.Allocate();
+            // string newClientContent = "";
+            // try
+            // {
+            //     sb.Append("{\"records\":[").Append(nsgMessagesString).Append("]}");
+            //     newClientContent = sb.ToString();
+            // } 
+            // finally
+            // {
+            //     StringBuilderPool.Free(sb);
+            // }
+            string newClientContent = nsgMessagesString;
             //
             // newClientContent looks like this:
             // {
@@ -78,15 +78,15 @@ namespace nsgFunc
             // }
             //
 
-            string logIncomingJSON = Util.GetEnvironmentVariable("logIncomingJSON");
-            Boolean flag;
-            if (Boolean.TryParse(logIncomingJSON, out flag))
-            {
-                if (flag)
-                {
-                    Util.logIncomingRecord(newClientContent, cefLogBinder, log).Wait();
-                }
-            }
+            // string logIncomingJSON = Util.GetEnvironmentVariable("logIncomingJSON");
+            // Boolean flag;
+            // if (Boolean.TryParse(logIncomingJSON, out flag))
+            // {
+            //     if (flag)
+            //     {
+            //         Util.logIncomingRecord(newClientContent, cefLogBinder, log).Wait();
+            //     }
+            // }
 
             int bytesSent = 0;
             switch (outputBinding)

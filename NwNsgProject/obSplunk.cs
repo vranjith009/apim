@@ -75,30 +75,36 @@ namespace nsgFunc
 
         static System.Collections.Generic.IEnumerable<string> convertToSplunkList(string newClientContent, ILogger log)
         {
-            foreach (var messageList in denormalizedSplunkEvents(newClientContent, null, log))
-            {
+            string[] lines = newClientContent.Split(
+                new[] { Environment.NewLine }, StringSplitOptions.None);
 
-                StringBuilder outgoingJson = StringBuilderPool.Allocate();
-                outgoingJson.Capacity = MAXTRANSMISSIONSIZE;
+            foreach (var messageJson in lines) {
+                yield return messageJson.ToString();
+            }    
+            // foreach (var messageList in denormalizedSplunkEvents(newClientContent, null, log))
+            // {
 
-                try
-                {
-                    foreach (var message in messageList)
-                    {
-                        var messageAsString = JsonConvert.SerializeObject(message, new JsonSerializerSettings
-                        {
-                            NullValueHandling = NullValueHandling.Ignore
-                        });
-                        outgoingJson.Append(messageAsString);
-                    }
-                    yield return outgoingJson.ToString();
-                }
-                finally
-                {
-                    StringBuilderPool.Free(outgoingJson);
-                }
+            //     StringBuilder outgoingJson = StringBuilderPool.Allocate();
+            //     outgoingJson.Capacity = MAXTRANSMISSIONSIZE;
 
-            }
+            //     try
+            //     {
+            //         foreach (var message in messageList)
+            //         {
+            //             var messageAsString = JsonConvert.SerializeObject(message, new JsonSerializerSettings
+            //             {
+            //                 NullValueHandling = NullValueHandling.Ignore
+            //             });
+            //             outgoingJson.Append(messageAsString);
+            //         }
+            //         yield return outgoingJson.ToString();
+            //     }
+            //     finally
+            //     {
+            //         StringBuilderPool.Free(outgoingJson);
+            //     }
+
+            // }
         }
 
         public static bool ValidateMyCert(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors sslErr)
