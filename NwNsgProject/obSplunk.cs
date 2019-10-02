@@ -44,9 +44,10 @@ namespace nsgFunc
 
             int bytesSent = 0;
             
-            log.LogInformation("Transmission message details : ");
+            log.LogInformation(string.Format("Transmission message details : {0}", newClientContent.Length));
             string[] lines = newClientContent.Split(
                 new[] { Environment.NewLine }, StringSplitOptions.None);
+                
             foreach (var transmission in lines)
             {
                 log.LogInformation(transmission);

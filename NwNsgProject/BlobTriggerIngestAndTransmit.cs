@@ -82,6 +82,7 @@ namespace nsgFunc
             {                
                 CloudBlockBlob blob = nsgDataBlobBinder.BindAsync<CloudBlockBlob>(attributes).Result;
                 await blob.DownloadRangeToByteArrayAsync(nsgMessages, 0, startingByte, dataLength);
+                log.LogInformation(string.Format("nsgMessages size: {0}", nsgMessages.Length));
 
                 if (nsgMessages[0] == ',')
                 {
@@ -101,7 +102,7 @@ namespace nsgFunc
                 bytePool.Return(nsgMessages);
             }
 
-            // log.LogInformation(nsgMessagesString);
+            log.LogInformation(string.Format("nsgMessagesString size: {0}", nsgMessagesString.Length));
             
 
             try
