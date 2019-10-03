@@ -24,7 +24,7 @@ namespace nsgFunc
             return result;
         }
 
-        public static async Task<int> SendMessagesDownstreamAsync(string nsgMessagesString, ExecutionContext executionContext, Binder cefLogBinder, ILogger log)
+        public static async Task<int> SendMessagesDownstreamAsync(string newClientContent, ExecutionContext executionContext, Binder cefLogBinder, ILogger log)
         {
             //
             // nsgMessagesString looks like this:
@@ -55,17 +55,17 @@ namespace nsgFunc
             //newClientContent += trimmedMessages.Substring(curlyBrace);
             //newClientContent += "]}";
 
-            StringBuilder sb = StringBuilderPool.Allocate();
-            string newClientContent = "";
-            try
-            {
-                sb.Append("{\"records\":[").Append(nsgMessagesString).Append("]}");
-                newClientContent = sb.ToString();
-            } 
-            finally
-            {
-                StringBuilderPool.Free(sb);
-            }
+            // StringBuilder sb = StringBuilderPool.Allocate();
+            // string newClientContent = "";
+            // try
+            // {
+            //     sb.Append("{\"records\":[").Append(nsgMessagesString).Append("]}");
+            //     newClientContent = sb.ToString();
+            // } 
+            // finally
+            // {
+            //     StringBuilderPool.Free(sb);
+            // }
 
             //
             // newClientContent looks like this:
@@ -78,15 +78,15 @@ namespace nsgFunc
             // }
             //
 
-            string logIncomingJSON = Util.GetEnvironmentVariable("logIncomingJSON");
-            Boolean flag;
-            if (Boolean.TryParse(logIncomingJSON, out flag))
-            {
-                if (flag)
-                {
-                    Util.logIncomingRecord(newClientContent, cefLogBinder, log).Wait();
-                }
-            }
+            // string logIncomingJSON = Util.GetEnvironmentVariable("logIncomingJSON");
+            // Boolean flag;
+            // if (Boolean.TryParse(logIncomingJSON, out flag))
+            // {
+            //     if (flag)
+            //     {
+            //         Util.logIncomingRecord(newClientContent, cefLogBinder, log).Wait();
+            //     }
+            // }
 
             int bytesSent = 0;
             switch (outputBinding)
@@ -225,50 +225,75 @@ namespace nsgFunc
 
             try
             {
-                NSGFlowLogRecords logs = JsonConvert.DeserializeObject<NSGFlowLogRecords>(newClientContent);
-
-                foreach (var record in logs.records)
+                foreach (var transmission in newClientContent.Split(
+                        new[] { Environment.NewLine }, StringSplitOptions.None))
                 {
-                    float version = record.properties.Version;
-
-                    foreach (var outerFlow in record.properties.flows)
-                    {
-                        foreach (var innerFlow in outerFlow.flows)
+                    if (transmission.Length > 0) {
+                        var splunkEventMessage = new SplunkEventMessage(transmission);
+                        var sizeOfObject = splunkEventMessage.GetSizeOfObject();
+                        
+                        if (sizeOfListItems + sizeOfObject > MAXTRANSMISSIONSIZE + 20 || outgoingSplunkList.Count == 450)
                         {
-                            foreach (var flowTuple in innerFlow.flowTuples)
-                            {
-                                var tuple = new NSGFlowLogTuple(flowTuple, version);
-
-                                var denormalizedRecord = new DenormalizedRecord(
-                                    record.properties.Version,
-                                    record.time,
-                                    record.category,
-                                    record.operationName,
-                                    record.resourceId,
-                                    outerFlow.rule,
-                                    innerFlow.mac,
-                                    tuple);
-
-                                var splunkEventMessage = new SplunkEventMessage(denormalizedRecord);
-                                var sizeOfObject = splunkEventMessage.GetSizeOfObject();
-
-                                if (sizeOfListItems + sizeOfObject > MAXTRANSMISSIONSIZE + 20 || outgoingSplunkList.Count == 450)
-                                {
-                                    yield return outgoingSplunkList;
-                                    outgoingSplunkList.Clear();
-                                    sizeOfListItems = 0;
-                                }
-                                outgoingSplunkList.Add(splunkEventMessage);
-
-                                sizeOfListItems += sizeOfObject;
-                            }
+                            yield return outgoingSplunkList;
+                            outgoingSplunkList.Clear();
+                            sizeOfListItems = 0;
                         }
+                        outgoingSplunkList.Add(splunkEventMessage);
+
+                        sizeOfListItems += sizeOfObject;
                     }
                 }
+
                 if (sizeOfListItems > 0)
                 {
                     yield return outgoingSplunkList;
                 }
+
+
+                // NSGFlowLogRecords logs = JsonConvert.DeserializeObject<NSGFlowLogRecords>(newClientContent);
+
+                // foreach (var record in logs.records)
+                // {
+                //     float version = record.properties.Version;
+
+                //     foreach (var outerFlow in record.properties.flows)
+                //     {
+                //         foreach (var innerFlow in outerFlow.flows)
+                //         {
+                //             foreach (var flowTuple in innerFlow.flowTuples)
+                //             {
+                //                 var tuple = new NSGFlowLogTuple(flowTuple, version);
+
+                //                 var denormalizedRecord = new DenormalizedRecord(
+                //                     record.properties.Version,
+                //                     record.time,
+                //                     record.category,
+                //                     record.operationName,
+                //                     record.resourceId,
+                //                     outerFlow.rule,
+                //                     innerFlow.mac,
+                //                     tuple);
+
+                //                 var splunkEventMessage = new SplunkEventMessage(denormalizedRecord);
+                //                 var sizeOfObject = splunkEventMessage.GetSizeOfObject();
+
+                //                 if (sizeOfListItems + sizeOfObject > MAXTRANSMISSIONSIZE + 20 || outgoingSplunkList.Count == 450)
+                //                 {
+                //                     yield return outgoingSplunkList;
+                //                     outgoingSplunkList.Clear();
+                //                     sizeOfListItems = 0;
+                //                 }
+                //                 outgoingSplunkList.Add(splunkEventMessage);
+
+                //                 sizeOfListItems += sizeOfObject;
+                //             }
+                //         }
+                //     }
+                // }
+                // if (sizeOfListItems > 0)
+                // {
+                //     yield return outgoingSplunkList;
+                // }
             }
             finally
             {

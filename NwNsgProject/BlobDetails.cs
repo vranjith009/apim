@@ -27,6 +27,10 @@ namespace nsgFunc
         public string Hour { get; set; }
         public string Minute { get; set; }
         public string Mac { get; set; }
+        public string Date { get; set; }
+        public string FileName { get; set; }
+        public string BlobContainerName { get; set; }
+
 
         public BlobDetails(string path)
         {
@@ -41,6 +45,14 @@ namespace nsgFunc
             Hour = parts[13].Split('=')[1];
             Minute = parts[14].Split('=')[1];
             Mac = parts[15].Split('=')[1];
+        }
+
+        public BlobDetails(string date, string hr, string name, string containerName)
+        {
+            Date = date;
+            Hour = hr;
+            FileName = name;
+            BlobContainerName = containerName;
         }
 
         public BlobDetails(string subscriptionId, string resourceGroupName, string nsgName, string year, string month, string day, string hour, string minute, string mac)
@@ -81,7 +93,17 @@ namespace nsgFunc
 
         public override string ToString()
         {
-            return string.Format("{0}_{1}_{2}_{3}", ResourceGroupName, NsgName, Day, Hour);
+            return string.Format("{0}_{1}_{2}_{3}", BlobContainerName, Date, Hour, FileName);
+        }
+
+        public string GetPartitionKey_1()
+        {
+            return string.Format("{0}_{1}", BlobContainerName, Date);
+        }
+
+        public string GetRowKey_1()
+        {
+            return string.Format("{0}_{1}", Hour, FileName);
         }
     }
 }

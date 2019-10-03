@@ -10,13 +10,13 @@ using Microsoft.CodeAnalysis.Formatting;
 class SplunkEventMessage
 {
     public string sourcetype { get; set; }
-    public double time { get; set; }
-    public DenormalizedRecord @event { get; set; }
+    // public double time { get; set; }
+    public string @event { get; set; }
 
-    public SplunkEventMessage (DenormalizedRecord splunkEvent)
+    public SplunkEventMessage (string splunkEvent)
     {
-        sourcetype = "amdl:nsg:flowlogs";
-        time = unixTime(splunkEvent.time);
+        sourcetype = "vipps:apim:flowlogs";
+        // time = unixTime(splunkEvent.time);
         @event = splunkEvent;
     }
 
@@ -31,7 +31,7 @@ class SplunkEventMessage
 
     public int GetSizeOfObject()
     {
-        return sourcetype.Length + 10 + 6 + (@event == null ? 0 : @event.GetSizeOfJSONObject());
+        return sourcetype.Length + 10 + 6 + (@event == null ? 0 : @event.Length + 6 + 6);
     }
 }
 
