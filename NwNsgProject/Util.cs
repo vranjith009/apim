@@ -24,7 +24,7 @@ namespace nsgFunc
             return result;
         }
 
-        public static async Task<int> SendMessagesDownstreamAsync(string nsgMessagesString, ExecutionContext executionContext, Binder cefLogBinder, ILogger log)
+        public static async Task<int> SendMessagesDownstreamAsync(string newClientContent, ExecutionContext executionContext, Binder cefLogBinder, ILogger log)
         {
             //
             // nsgMessagesString looks like this:
@@ -66,7 +66,7 @@ namespace nsgFunc
             // {
             //     StringBuilderPool.Free(sb);
             // }
-            string newClientContent = nsgMessagesString;
+            // string newClientContent = nsgMessagesString;
             //
             // newClientContent looks like this:
             // {

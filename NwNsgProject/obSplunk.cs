@@ -47,6 +47,11 @@ namespace nsgFunc
             log.LogInformation(string.Format("Transmission message details : {0}", newClientContent.Length));
             // string[] lines = newClientContent.Split(
             //     new[] { Environment.NewLine }, StringSplitOptions.None);
+            log.LogInformation(string.Format("Transmission message content : {0}", newClientContent));
+            foreach (var transmission in newClientContent.Split(
+                new[] { Environment.NewLine }, StringSplitOptions.None)) {
+                        log.LogInformation(string.Format("Transmission - : {0} - data = {1}", transmission.Length, transmission));
+                }
                 
             foreach (var transmission in newClientContent.Split(
                 new[] { Environment.NewLine }, StringSplitOptions.None))
