@@ -83,14 +83,16 @@ namespace nsgFunc
                 CloudBlockBlob blob = nsgDataBlobBinder.BindAsync<CloudBlockBlob>(attributes).Result;
                 await blob.DownloadRangeToByteArrayAsync(nsgMessages, 0, startingByte, dataLength);
                 log.LogInformation(string.Format("nsgMessages size: {0}", nsgMessages.Length));
-
-                if (nsgMessages[0] == ',')
-                {
-                    nsgMessagesString = System.Text.Encoding.UTF8.GetString(nsgMessages, 1, (int)(dataLength - 1));
-                } else
-                {
-                    nsgMessagesString = System.Text.Encoding.UTF8.GetString(nsgMessages, 0, (int)dataLength);
-                }
+                
+                
+                nsgMessagesString = System.Text.Encoding.UTF8.GetString(nsgMessages, 0, (int)dataLength);
+                // if (nsgMessages[0] == ',')
+                // {
+                //     nsgMessagesString = System.Text.Encoding.UTF8.GetString(nsgMessages, 1, (int)(dataLength - 1));
+                // } else
+                // {
+                //     nsgMessagesString = System.Text.Encoding.UTF8.GetString(nsgMessages, 0, (int)dataLength);
+                // }
             }
             catch (Exception ex)
             {
