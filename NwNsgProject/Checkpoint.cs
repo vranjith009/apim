@@ -30,13 +30,13 @@ namespace nsgFunc
             if (checkpoint == null)
             {
                 log.LogInformation($"New file, no entry in checkpoint table.  File Name:{blobDetails.FileName}.");
-
-                checkpoint = new Checkpoint(blobDetails.GetPartitionKey_1(), blobDetails.GetRowKey_1(), "", 0, 1);
+                //  Defaulting hte index to 0.
+                checkpoint = new Checkpoint(blobDetails.GetPartitionKey_1(), blobDetails.GetRowKey_1(), "", 0, 0);
             }
-            if (checkpoint.CheckpointIndex == 0)
-            {
-                checkpoint.CheckpointIndex = 1;
-            }
+            // if (checkpoint.CheckpointIndex == 0)
+            // {
+            //     checkpoint.CheckpointIndex = 1;
+            // }
 
             return checkpoint;
         }
