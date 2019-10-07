@@ -49,6 +49,8 @@ namespace nsgFunc
                 var client = new SingleHttpClientInstance();
                 try
                 {
+                    log.LogInformation($"Sending data block to splunk, size={transmission.Length}.");
+
                     HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, splunkAddress);
                     req.Headers.Accept.Clear();
                     req.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

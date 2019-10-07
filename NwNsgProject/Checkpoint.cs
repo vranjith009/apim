@@ -1,5 +1,7 @@
 ﻿using System;
 using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.Extensions.Logging;
+
 
 namespace nsgFunc
 {
@@ -18,7 +20,7 @@ namespace nsgFunc
             CheckpointIndex = index;
         }
 
-        public static Checkpoint GetCheckpoint(BlobDetails blobDetails, CloudTable checkpointTable)
+        public static Checkpoint GetCheckpoint(BlobDetails blobDetails, CloudTable checkpointTable, ILogger log)
         {
             TableOperation operation = TableOperation.Retrieve<Checkpoint>(
                 blobDetails.GetPartitionKey_1(), blobDetails.GetRowKey_1());
@@ -27,6 +29,8 @@ namespace nsgFunc
             Checkpoint checkpoint = (Checkpoint)result.Result;
             if (checkpoint == null)
             {
+                log.LogInformation($"New file, no entry in checkpoint table.  File Name:{blobDetails.FileName}.");
+
                 checkpoint = new Checkpoint(blobDetails.GetPartitionKey_1(), blobDetails.GetRowKey_1(), "", 0, 1);
             }
             if (checkpoint.CheckpointIndex == 0)

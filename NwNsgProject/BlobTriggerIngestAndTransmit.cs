@@ -22,7 +22,7 @@ namespace nsgFunc
             ExecutionContext executionContext,
             ILogger log)
         {
-            log.LogDebug($"BlobTriggerIngestAndTransmit triggered: {executionContext.InvocationId} ");
+            log.LogInformation($"BlobTriggerIngestAndTransmit triggered: {executionContext.InvocationId} ");
 
             string nsgSourceDataAccount = Util.GetEnvironmentVariable("nsgSourceDataAccount");
             if (nsgSourceDataAccount.Length == 0)
@@ -48,14 +48,15 @@ namespace nsgFunc
             var blobDetails = new BlobDetails(date, hr, name, blobContainerName);
 
             // get checkpoint
-            Checkpoint checkpoint = Checkpoint.GetCheckpoint(blobDetails, checkpointTable);
+            Checkpoint checkpoint = Checkpoint.GetCheckpoint(blobDetails, checkpointTable, log);
+            log.LogInformation($"Fetched check point details. Checkpoint index:{checkpoint.CheckpointIndex} ");
 
             var blockList = myBlob.DownloadBlockListAsync().Result;
             var startingByte = blockList.Where((item, index) => index<checkpoint.CheckpointIndex).Sum(item => item.Length);
             var endingByte = blockList.Where((item, index) => index < blockList.Count()-1).Sum(item => item.Length);
             var dataLength = endingByte - startingByte;
 
-            log.LogDebug("Blob: {0}, starting byte: {1}, ending byte: {2}, number of bytes: {3}", blobDetails.ToString(), startingByte, endingByte, dataLength);
+            log.LogInformation("Blob: {0}, starting byte: {1}, ending byte: {2}, number of bytes: {3}", blobDetails.ToString(), startingByte, endingByte, dataLength);
 
             if (dataLength == 0)
             {
