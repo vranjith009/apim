@@ -52,11 +52,11 @@ namespace nsgFunc
             log.LogInformation($"Fetched check point details. Checkpoint index:{checkpoint.CheckpointIndex} ");
 
             var blockList = myBlob.DownloadBlockListAsync().Result;
-            var startingByte = blockList.Where((item, index) => index<checkpoint.CheckpointIndex).Sum(item => item.Length);
-            var endingByte = blockList.Where((item, index) => index < blockList.Count()-1).Sum(item => item.Length);
+            var startingByte = blockList.Where((item, index) => index < checkpoint.CheckpointIndex).Sum(item => item.Length);
+            var endingByte = blockList.Where((item, index) => index < blockList.Count()).Sum(item => item.Length);
             var dataLength = endingByte - startingByte;
 
-            log.LogInformation("Blob: {0}, starting byte: {1}, ending byte: {2}, number of bytes: {3}", blobDetails.ToString(), startingByte, endingByte, dataLength);
+            log.LogInformation("Blob: {0}, starting byte: {1}, ending byte: {2}, number of bytes: {3}, no of blocks: {4}", blobDetails.ToString(), startingByte, endingByte, dataLength, blockList.Count());
 
             if (dataLength == 0)
             {
